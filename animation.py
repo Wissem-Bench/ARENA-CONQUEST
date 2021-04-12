@@ -14,7 +14,7 @@ class Animation:
 
 
     def tick(self):
-        print("animation ref " + str(id(self)) + " index " + str(self.index))
+        # print("animation ref " + str(id(self)) + " index " + str(self.index))
         if self.animating == True:
             self.currentTime = time.time()
             self.timer = self.currentTime - self.lastTime
