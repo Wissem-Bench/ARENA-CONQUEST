@@ -14,23 +14,30 @@ class Player:
     # heroknight.rightIdleAnimation =
 
     def keyManager(self):
-        if not self.handler.characterManager.check_collision(self.character, self.handler.characterManager.all_characters):
-            if self.handler.game.pressed.get(pygame.K_RIGHT):
-                self.character.moveRight = True
-                self.character.rect.x += self.character.velocity
-            else: self.character.moveRight = False
-            if self.handler.game.pressed.get(pygame.K_LEFT):
-                self.character.moveLeft = True
-                self.character.rect.x -= self.character.velocity
-            else: self.character.moveLeft = False
-            if self.handler.game.pressed.get(pygame.K_UP):
-                self.character.moveUp = True
-                self.character.rect.y -= (self.character.velocity*0.60)
-            else: self.character.moveUp = False
-            if self.handler.game.pressed.get(pygame.K_DOWN):
-                self.character.moveDown = True
-                self.character.rect.y += (self.character.velocity*0.60)
-            else: self.character.moveDown = False
+        if self.handler.game.pressed.get(pygame.K_d):
+            self.character.orderedToAttack = True
+        else: self.character.orderedToAttack = False
+        if not self.character.isAttacking:
+            if not self.handler.characterManager.check_collision(self.character, self.handler.characterManager.all_characters):
+                if (self.handler.game.pressed.get(pygame.K_RIGHT) 
+                and self.character.rect.x + self.character.rect.width < self.handler.game.WIN.get_width()):
+                    self.character.moveRight = True
+                else: self.character.moveRight = False
+                if self.handler.game.pressed.get(pygame.K_LEFT) and self.character.rect.x > 0:
+                    self.character.moveLeft = True
+                else: self.character.moveLeft = False
+                if self.handler.game.pressed.get(pygame.K_UP) and self.character.rect.y > 0:
+                    self.character.moveUp = True
+                else: self.character.moveUp = False
+                if (self.handler.game.pressed.get(pygame.K_DOWN)
+                and self.character.rect.y + self.character.rect.height < self.handler.game.WIN.get_height()):
+                    self.character.moveDown = True
+                else: self.character.moveDown = False
+        else: 
+            self.character.moveRight = False
+            self.character.moveLeft = False
+            self.character.moveUp = False
+            self.character.moveDown = False
         
 
     

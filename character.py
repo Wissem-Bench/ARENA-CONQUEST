@@ -47,43 +47,37 @@ class Character(pygame.sprite.Sprite) :
     
         #closing attack animation
         if self.isAttacking:
-            self.length = len(self.currentAnimation.frames)-1
-            if self.currentAnimation.index == len(self.currentAnimation.frames)-1:
+            length = len(self.currentAnimation.frames)-1
+            if self.currentAnimation.index == length:
                 self.isAttacking = False
+                # self.orderedToAttack = False # to prevent keep attacking using move keys
                 self.rightAttackAnimation.index = 0
                 self.leftAttackAnimation.index = 0
 
         
-        if not self.isAttacking:
+        # if not self.isAttacking:
 
             #running animation
-            if (self.moveRight #self.handler.game.pressed.get(pygame.K_RIGHT)
-            and self.rect.x + self.rect.width < self.handler.game.WIN.get_width()):
-                self.side = 'right'
-                # self.move_right()
+        if self.moveRight:
+            self.side = 'right'
+            self.currentAnimation = self.rightRunAnimation
+
+        if self.moveLeft:
+            self.side = 'left'
+            self.currentAnimation = self.leftRunAnimation
+
+        if self.moveUp:
+            if self.side == 'right':
                 self.currentAnimation = self.rightRunAnimation
+            else: self.currentAnimation = self.leftRunAnimation
 
-            if self.moveLeft and self.rect.x > 0: # self.handler.game.pressed.get(pygame.K_LEFT)
-                self.side = 'left'
-                # self.move_left()
-                self.currentAnimation = self.leftRunAnimation
-   
-            if self.moveUp and self.rect.y > 0: # self.handler.game.pressed.get(pygame.K_UP)
-                # self.move_up()
-                if self.side == 'right':
-                    self.currentAnimation = self.rightRunAnimation
-                else: self.currentAnimation = self.leftRunAnimation
-
-            if (self.moveDown #self.handler.game.pressed.get(pygame.K_DOWN) 
-                and self.rect.y + self.rect.height < self.handler.game.WIN.get_height()):
-                # self.move_down()
-                if self.side == 'right':
-                    self.currentAnimation = self.rightRunAnimation
-                else: self.currentAnimation = self.leftRunAnimation
+        if self.moveDown:
+            if self.side == 'right':
+                self.currentAnimation = self.rightRunAnimation
+            else: self.currentAnimation = self.leftRunAnimation
 
         # attack animation
-        if (self.orderedToAttack # self.handler.game.pressed.get(pygame.K_d)
-        and not self.isAttacking):
+        if (self.orderedToAttack and not self.isAttacking):
             self.isAttacking = True
             if self.side == 'right':
                 self.currentAnimation = self.rightAttackAnimation
@@ -100,6 +94,9 @@ class Character(pygame.sprite.Sprite) :
 
 
     def tick(self):
+        self.move()
+        self.moving = (self.moveRight or self.moveLeft or self.moveUp or self.moveDown)
+        # print('moving: ' + str(self.moving))
         self.animationManager()
         self.currentAnimation.tick()
         self.image = self.currentAnimation.getCurrentFrame()
