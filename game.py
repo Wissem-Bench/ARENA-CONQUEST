@@ -1,12 +1,15 @@
-from ssTiles import SsTiles
-from tiles import *
-from player import Player
+# from ssTiles import SsTiles
+# from tiles import *
+# from player import Player
 from enemy import Enemy
 from handler import Handler
 import pygame
 import sys
 from assets import Assets
 from character import Character
+from gameCamera import GameCamera
+from gameState import GameState
+from menuState import MenuState
 pygame.init()
 
 class Game:
@@ -21,38 +24,33 @@ class Game:
         self.WHITE = (255,255,255)
         self.dest = (100, 100)
         self.handler = Handler(self) 
-        # should be before any other object that have handler in its const.
+        # should be before any other object that have handler in its constr.
         # Handler(self) current instance in the current class
-        self.assets = Assets()
-        self.heroKnight = Character(self.handler,self.assets.heroknight,100,100,10,5)
-        self.player = Player(self.handler, self.heroKnight)
-        self.pressed = {
-            "right key" : False,
-            "left key" : False,
-            "up key" : False,
-            "down key" : False,
-            "d key" : False
-        }
-        self.ssTile = SsTiles('spritesheet.png')
-        self.map = TileMap('test_level.csv', self.ssTile)
-        self.handler.init()
+        self.assets = Assets(self.handler)
+        
+        self.gameState = GameState(self.handler)
+        self.gameState.init()
+        self.menuState = MenuState(self.handler)
+        self.menuState.init()
+        self.currentState = self.menuState
+        
 
+        # self.ssTile = SsTiles('spritesheet.png')
+        # self.map = TileMap('test_level.csv', self.ssTile)
+        # self.bg = pygame.transform.rotate(self.bg, -90)
+
+
+        # draw everything here:
     def draw_window(self):
         self.WIN.fill(self.BLACK)
-        # draw everything here:
-        self.map.draw_map(self.WIN)
-        self.heroKnight.draw()
-        # self.enemy.draw()
-        self.handler.characterManager.draw()
+        self.currentState.draw()
 
         # end of drawing
         pygame.display.flip()
         
 
     def tick(self):
-        self.heroKnight.tick()
-        self.player.tick()
-        self.handler.characterManager.tick()
+        self.currentState.tick()
 
 
     def run(self):
@@ -60,15 +58,6 @@ class Game:
         running = True
         while running:
             clock.tick(self.FPS)
+            self.handler.inputManager.tick()
             self.tick()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    run = False
-                    pygame.quit()
-                    print('game closed')
-                    sys.exit()
-                elif event.type == pygame.KEYDOWN:
-                    self.pressed[event.key] = True
-                elif event.type == pygame.KEYUP:
-                    self.pressed[event.key] = False
             self.draw_window()

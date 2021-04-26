@@ -1,0 +1,23 @@
+{
+    "favorites.resources": [
+        "main.py",
+        "game.py",
+        "handler.py",
+        "menuState.py",
+        "gameState.py",
+        "gameCamera.py",
+        "character.py",
+        "charactersList.py",
+        "characterManager.py",
+        "player.py",
+        "enemy.py",
+        "spriteSheet.py",
+        "animation.py",
+        "assets.py",
+        "world.py",
+        "gameObject.py",
+        "Assets",
+        "inputManger.py"
+    ],
+    "favorites.sortOrder": "MANUAL"
+}

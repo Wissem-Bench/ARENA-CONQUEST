@@ -3,7 +3,7 @@ from animation import Animation
 
 class Character(pygame.sprite.Sprite) :
     
-    def __init__(self, handler, asset, health, max_health, damage, velocity):
+    def __init__(self, handler, assets, health, max_health, damage, velocity):
         super().__init__()
         self.handler = handler
         self.health = health
@@ -15,18 +15,21 @@ class Character(pygame.sprite.Sprite) :
         self.moveUp = False
         self.moveDown = False
         self.orderedToAttack = False
-        self.rightIdleAnimation = Animation(asset[0], 0.07)
-        self.leftIdleAnimation = Animation(asset[1], 0.07)
-        self.rightRunAnimation = Animation(asset[2], 0.07)
-        self.leftRunAnimation = Animation(asset[3], 0.07)
-        self.rightAttackAnimation = Animation(asset[4], 0.05)
-        self.leftAttackAnimation = Animation(asset[5], 0.05)
-        self.currentAnimation = Animation(asset[0], 0.07)
+        self.rightIdleAnimation = Animation(assets[0], 0.07)
+        self.leftIdleAnimation = Animation(assets[1], 0.07)
+        self.rightRunAnimation = Animation(assets[2], 0.07)
+        self.leftRunAnimation = Animation(assets[3], 0.07)
+        self.rightAttackAnimation = Animation(assets[4], 0.05)
+        self.leftAttackAnimation = Animation(assets[5], 0.05)
+        self.currentAnimation = self.rightIdleAnimation
         self.rect = self.rightIdleAnimation.frames[0].get_rect()
-        self.rect.x = 250
-        self.rect.y = 200
+        self.rect.x = 220
+        self.rect.y = 220
         self.side = 'right'
         self.isAttacking = False
+        self.image = self.currentAnimation.frames[0]
+        
+
 
     def move(self):
         if self.moveRight:
@@ -85,7 +88,7 @@ class Character(pygame.sprite.Sprite) :
                 self.currentAnimation = self.leftAttackAnimation
 
         # idle animation
-        if (all(key == False for key in self.handler.game.pressed.values()) 
+        if (all(key == False for key in self.handler.inputManager.pressed.values()) 
         and not self.isAttacking):
             if self.side == 'right':
                 self.currentAnimation = self.rightIdleAnimation
@@ -103,7 +106,9 @@ class Character(pygame.sprite.Sprite) :
 
 
     def draw(self):
-        self.handler.game.WIN.blit(self.currentAnimation.getCurrentFrame(), self.rect)
+        self.handler.game.WIN.blit(self.currentAnimation.getCurrentFrame(),
+        (self.rect.x - self.handler.game.gameState.camera.xOffset,
+        self.rect.y - self.handler.game.gameState.camera.yOffset))
 
     # def check_collision(self, sprite, group):
     #     return pygame.sprite.spritecollide(sprite,group,False,pygame.sprite.collide_mask)

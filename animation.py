@@ -8,13 +8,15 @@ class Animation:
     def __init__(self, frames, speed):
         # fileName,columns,rows,flipped
         self.frames = frames
+        # print("init animation class: " + str(len(self.frames[0])))
         self.speed = speed
         self.index , self.lastTime , self.currentTime , self.timer = 0,0,0,0
         self.animating = True
+        
 
 
     def tick(self):
-        # print("animation ref " + str(id(self)) + " index " + str(self.index))
+
         if self.animating == True:
             self.currentTime = time.time()
             self.timer = self.currentTime - self.lastTime
@@ -27,5 +29,3 @@ class Animation:
 
     def getCurrentFrame(self):
         return self.frames[self.index]
-
-

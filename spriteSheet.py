@@ -3,8 +3,6 @@ import pygame
 class SpriteSheet:
     def __init__(self, files):
         self.files = files
-        # self.columns = columns
-        # self.rows = rows
         self.sheets = []
         for i in range(len(files)):
             self.sheets.append(pygame.image.load(f'Assets/{self.files[i][0]}.png'))
