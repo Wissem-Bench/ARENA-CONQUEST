@@ -3,11 +3,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Akrem
-.ssh
-wissemSSH
-.pub
-
 # C extensions
 *.so
 
