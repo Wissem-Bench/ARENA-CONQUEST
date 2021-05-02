@@ -116,7 +116,6 @@ class MenuState():
             self.rect.x = 320
             self.rect.y = 0.5
             print('1')
-            return
 
             if self.check_clicked_button(self.assets.right_rect):
                 self.choosenHero = Ronin(self.handler)
