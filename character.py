@@ -23,11 +23,12 @@ class Character(pygame.sprite.Sprite) :
         self.leftAttackAnimation = Animation(assets[5], 0.05)
         self.currentAnimation = self.rightIdleAnimation
         self.rect = self.rightIdleAnimation.frames[0].get_rect()
-        self.rect.x = 220
-        self.rect.y = 220
+        self.rect.x = 250
+        self.rect.y = 250
         self.side = 'right'
         self.isAttacking = False
-        self.image = self.currentAnimation.frames[0]
+        # self.image = self.currentAnimation.frames[0]
+        # self.mask = pygame.mask.from_surface(self.image)
         
 
 
@@ -44,7 +45,6 @@ class Character(pygame.sprite.Sprite) :
         if self.moveDown:
             self.rect.y += self.velocity
 
-        # if not self.handler.enemyManager.check_collision(self, self.handler.enemyManager.all_enemies):
 
     def animationManager(self):
     
@@ -96,20 +96,20 @@ class Character(pygame.sprite.Sprite) :
                 self.currentAnimation = self.leftIdleAnimation
 
 
+    def check_collision(self, sprite, group):
+        return pygame.sprite.spritecollide(sprite, group, False, pygame.sprite.collide_mask)
+        
+
     def tick(self):
         self.move()
-        self.moving = (self.moveRight or self.moveLeft or self.moveUp or self.moveDown)
+        # self.moving = (self.moveRight or self.moveLeft or self.moveUp or self.moveDown)
         # print('moving: ' + str(self.moving))
         self.animationManager()
         self.currentAnimation.tick()
-        self.image = self.currentAnimation.getCurrentFrame()
+        # self.image = self.currentAnimation.getCurrentFrame()
 
 
     def draw(self):
         self.handler.game.WIN.blit(self.currentAnimation.getCurrentFrame(),
-        (self.rect.x - self.handler.game.gameState.camera.xOffset,
-        self.rect.y - self.handler.game.gameState.camera.yOffset))
-
-    # def check_collision(self, sprite, group):
-    #     return pygame.sprite.spritecollide(sprite,group,False,pygame.sprite.collide_mask)
-
+        (self.rect.x - self.handler.game.gameState.world.camera.xOffset,
+        self.rect.y - self.handler.game.gameState.world.camera.yOffset))

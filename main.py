@@ -7,6 +7,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# TO DO : enemy , collision , health, health bar 
-# backgroun (parallax)
-# death (with animation for each creature)
+    # TO DO : choosen character from menu state to game to game state

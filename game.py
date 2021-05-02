@@ -1,12 +1,12 @@
 # from ssTiles import SsTiles
 # from tiles import *
 # from player import Player
-from enemy import Enemy
+# from enemy import Enemy
 from handler import Handler
 import pygame
 import sys
 from assets import Assets
-from character import Character
+# from character import Character
 from gameCamera import GameCamera
 from gameState import GameState
 from menuState import MenuState
@@ -26,14 +26,14 @@ class Game:
         self.handler = Handler(self) 
         # should be before any other object that have handler in its constr.
         # Handler(self) current instance in the current class
-        self.assets = Assets(self.handler)
         
-        self.gameState = GameState(self.handler)
-        self.gameState.init()
+        self.assets = Assets(self.handler)
         self.menuState = MenuState(self.handler)
         self.menuState.init()
+        self.choosenHero = self.menuState.choosenHero
+        self.gameState = GameState(self.handler)
+        self.gameState.init()
         self.currentState = self.menuState
-        
 
         # self.ssTile = SsTiles('spritesheet.png')
         # self.map = TileMap('test_level.csv', self.ssTile)

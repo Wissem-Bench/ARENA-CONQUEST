@@ -5,19 +5,20 @@
         "handler.py",
         "menuState.py",
         "gameState.py",
-        "gameCamera.py",
         "character.py",
-        "charactersList.py",
-        "characterManager.py",
         "player.py",
-        "enemy.py",
+        "characterManager.py",
+        "inputManger.py",
+        "assets.py",
         "spriteSheet.py",
         "animation.py",
-        "assets.py",
-        "world.py",
         "gameObject.py",
-        "Assets",
-        "inputManger.py"
+        "world.py",
+        "heroesList.py",
+        "enemiesList.py",
+        "enemyManager.py",
+        "gameCamera.py",
+        "Assets"
     ],
     "favorites.sortOrder": "MANUAL"
 }

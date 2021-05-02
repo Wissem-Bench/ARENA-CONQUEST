@@ -9,18 +9,19 @@ class Assets:
         # pass
 
     def initGameAssets(self):
-        self.bg = pygame.image.load("Assets/grey-cat-8.jpg").convert()
-        # self.bg = pygame.transform.scale(self.bg, (int(8400/7), int(4500/7)))
-
-        self.heroknight = self.parceling(SpriteSheet([["HeroKnight", 10, 9]]), [8, 18, 24])
+        self.heroknight = self.parceling(SpriteSheet([["HeroKnight", 10, 9]], (1,1)), [8, 18, 24])
 
         self.evilwizard = self.parceling(SpriteSheet([["Evil Wizard/Idle", 8, 1], 
-                                                    ["Evil Wizard/Run", 13, 1],
-                                                    ["Evil Wizard/Attack1", 18, 1]]), [8,16,24])
+                                                    ["Evil Wizard/Run", 8, 1],
+                                                    ["Evil Wizard/Attack2", 8, 1]], (1,1.25)), [8,16,24])
+
+        self.ronin = self.parceling(SpriteSheet([["Ronin/spr_RoninIdle_strip", 8, 1], 
+                                                ["Ronin/spr_RoninRun_strip", 10, 1],
+                                                ["Ronin/spr_RoninAttack_strip", 25, 1]], (1,1)), [8,18,43])
 
         self.skeleton = self.parceling(SpriteSheet([["Skeleton Idle", 11, 1], 
                                                     ["Skeleton Walk", 13, 1],
-                                                    ["Skeleton Attack", 18, 1]]), [11, 24, 42])
+                                                    ["Skeleton Attack", 18, 1]], (1,1)), [11, 24, 42])
 
     def initMenuAssets(self):
         self.background = pygame.image.load("Assets/Menu/grey-cat-glacier.jpg").convert()
