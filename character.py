@@ -27,6 +27,7 @@ class Character(pygame.sprite.Sprite) :
         self.rect.y = 250
         self.side = 'right'
         self.isAttacking = False
+        self.notOrdered = True
         # self.image = self.currentAnimation.frames[0]
         # self.mask = pygame.mask.from_surface(self.image)
         
@@ -47,7 +48,6 @@ class Character(pygame.sprite.Sprite) :
 
 
     def animationManager(self):
-    
         #closing attack animation
         if self.isAttacking:
             length = len(self.currentAnimation.frames)-1
@@ -88,8 +88,7 @@ class Character(pygame.sprite.Sprite) :
                 self.currentAnimation = self.leftAttackAnimation
 
         # idle animation
-        if (all(key == False for key in self.handler.inputManager.pressed.values()) 
-        and not self.isAttacking):
+        if (self.notOrdered and not self.isAttacking):
             if self.side == 'right':
                 self.currentAnimation = self.rightIdleAnimation
             else: 
@@ -98,7 +97,6 @@ class Character(pygame.sprite.Sprite) :
 
     def check_collision(self, sprite, group):
         return pygame.sprite.spritecollide(sprite, group, False, pygame.sprite.collide_mask)
-        
 
     def tick(self):
         self.move()

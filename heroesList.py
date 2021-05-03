@@ -13,7 +13,7 @@ class EvilWizard(Character):
         self.handler = handler
 
 class Ronin(Character):
-    
+
     def __init__(self, handler):
         super().__init__(handler, handler.game.assets.ronin, 100, 100, 12, 8)
         self.handler = handler

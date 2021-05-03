@@ -13,9 +13,6 @@ class Player:
         self.handler.game.gameState.world.camera.centerOnEntity(self.hero)
         # self.hero = HeroKnight(self.handler)
 
-    
-
-
     def keyManager(self):
         if self.handler.inputManager.pressed.get(pygame.K_d):
             self.hero.orderedToAttack = True
@@ -40,7 +37,9 @@ class Player:
             self.hero.moveLeft = False
             self.hero.moveUp = False
             self.hero.moveDown = False
-        
+        if all(key == False for key in self.handler.inputManager.pressed.values()):
+            self.hero.notOrdered = True
+        else: self.hero.notOrdered = False
 
     def tick(self):
         self.keyManager()

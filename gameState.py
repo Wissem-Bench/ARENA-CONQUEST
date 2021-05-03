@@ -13,14 +13,13 @@ class GameState():
         
     def init(self):
         self.handler.init()
-        self.world = World(self.handler)
+        self.world = World(self.handler, "battle_arena.png")
         self.world.init()
-        self.assets = self.handler.game.assets
-        self.assets.initGameAssets()
+        # self.handler.game.assets.initGameAssets()
         # self.camera = GameCamera(self.handler)
-        self.background = "battle_arena.png"
+        
         self.player = Player(self.handler)
-        self.skeleton = Skeleton(self.handler)
+        # self.skeleton = Skeleton(self.handler)
         # self.worldswitcher = {
         #     "world_1" : True ,
         #     "world_2" : False ,
@@ -28,13 +27,14 @@ class GameState():
         # }
 
 
-    def current_world(self):
-        self.world.world_creator(self.background, [[self.skeleton, 200, 200], [self.skeleton, 300, 300]])
-        self.skeleton.moveRight = True
+    # def current_world(self): # both skeletons have SAME reference !??
+    #     self.world.world_creator([[self.skeleton, 200, 200], [self.skeleton, 300, 300]])
+    #     self.skeleton.moveRight = True
+
     def tick(self):
+        self.world.tick()
         self.player.tick()
         # self.skeleton.tick()
-        self.skeleton.tick()
 
         
         # if self.worldswitcher["world_1"] == True:
@@ -45,8 +45,10 @@ class GameState():
         #     self.world.world_3()
         
     def draw(self):
-        self.current_world()
+        # self.current_world()
+        self.world.draw()
         self.player.draw()
+        # self.skeleton.draw()
         # self.colors = ['yellow']
         # self.sprites = pygame.sprite.Group()
         # self.objects = pygame.sprite.Group()

@@ -6,11 +6,18 @@ class EnemyController():
     
     def __init__(self, handler, character):
         self.handler = handler
-
-        self.characterGroup = pygame.sprite.Group()
+        self.character = character
+        # self.orders = {"moving" : True}
+        # self.character.moveRight = True
         # moveZone = self.circle(moveZone)
         # followingZone = self.circle(followingZone)
         # attackingZone = self.circle(attackingZone)
+
+    def behave(self):
+        if (not self.character.moveRight and not self.character.moveLeft and not self.character.moveUp 
+        and not self.character.moveDown and not self.character.orderedToAttack):
+            self.character.notOrdered = True
+        else: self.character.notOrdered = False
 
     def isInside(circle_x, circle_y, rad, x, y):
         if ((x - circle_x) * (x - circle_x) + 
@@ -30,7 +37,6 @@ class EnemyController():
         return False
 
 
-
     def enemyMoves(self, enemy, player_pos):
         if player_pos not in enemy.moveZone:
             if player in enemy.followingZone:
@@ -48,17 +54,10 @@ class EnemyController():
 
     # def check_collision(self, sprite, group):
     #     return pygame.sprite.spritecollide(sprite, group, False, pygame.sprite.collide_mask)
-        
-
-
-    
 
     def tick(self):
-        for character in self.characterGroup:
-            character.tick()
+        self.character.tick()
+        self.behave()
 
     def draw(self):
-        # for character in self.characterGroup:
-            # character.draw()
-        # self.character_spawn(self.skeleton, 240,200)
-        pass
+        self.character.draw()

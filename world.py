@@ -2,49 +2,27 @@ import pygame
 from handler import Handler
 from enemiesList import *
 from gameCamera import GameCamera
+from enemyManager import EnemyManager
 
 class World():
     
-    def __init__(self, handler) :
+    def __init__(self, handler, background) :
         self.handler = handler
-        self.assets = self.handler.game.assets
-        self.assets.initGameAssets()
-        self.enemyGroup = pygame.sprite.Group()
-        # self.playersGroup = pygame.sprite.Group()
+        self.background = background
         
     def init(self):
+        self.bg = pygame.image.load(f"Assets/{self.background}").convert()
         self.camera = GameCamera(self.handler)
-        self.skeleton = Skeleton(self.handler)
+        self.enemyManager = EnemyManager(self.handler)
         # self.playersGroup.add(self.handler.game.choosencharacter)
         # self.enemyGroup = pygame.sprite.Group()
 
-    def enemiesAppear(self,character, x, y):
-        self.enemyGroup.add(character)
-        character.rect.x = x
-        character.rect.y = y
-        # character.rect.x += character.velocity
-        # character.moveRight = True
-        # character.move()
-        character.tick()
-        character.draw()
-        # character.moveRight = True
-        # character.move()
-        # character.check_collision(self.handler.game.choosencharacter, self.enemyGroup)
-        # character.check_collision(character, self.playersGroup)
+    def tick(self):
+        self.enemyManager.tick()
 
-    def world_creator(self, background, enemies) :
-        bg = pygame.image.load(f"Assets/{background}").convert()
-        # bg = pygame.transform.scale(bg, (int(1920*1.25), int(1080*1.25)))
-        self.handler.game.WIN.blit(bg, (0 - self.camera.xOffset, 0 - self.camera.yOffset))
-        for i in range(len(enemies)):
-            self.enemiesAppear(enemies[i][0], enemies[i][1], enemies[i][2]) 
-            # self.world.world_creator(self.background, [[self.skeleton, 200, 200], [self.skeleton, 300, 300]])
-            # def enemiesAppear(self,character, x, y):
-            #     self.enemyGroup.add(character)
-            #     character.rect.x = x
-            #     character.rect.y = y
-            #     character.draw()
-            #     character.tick()
+    def draw(self):
+        self.handler.game.WIN.blit(self.bg, (0 - self.camera.xOffset, 0 - self.camera.yOffset))
+        self.enemyManager.draw()
 
     # def world_1(self):
     #     self.background = pygame.image.load("Assets/world_1.png").convert()
@@ -60,5 +38,3 @@ class World():
     #     self.background = pygame.image.load("Assets/world_1.png").convert()
     #     self.handler.game.WIN.blit(self.background, (0 - self.camera.xOffset, 0 - self.camera.yOffset))
     #     self.enemiesAppear(skeleton, 200, 200)
-
-        
