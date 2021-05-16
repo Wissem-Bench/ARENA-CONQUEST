@@ -10,6 +10,7 @@ from assets import Assets
 from gameCamera import GameCamera
 from gameState import GameState
 from menuState import MenuState
+from heroesList import HeroKnight
 pygame.init()
 
 class Game:
@@ -30,7 +31,7 @@ class Game:
         self.assets = Assets(self.handler)
         self.menuState = MenuState(self.handler)
         self.menuState.init()
-        self.choosenHero = self.menuState.choosenHero
+        # self.choosenHero = HeroKnight(self.handler) # TO BE NUKED !!!!!!!!!!!!!!!!???????????????????????
         self.gameState = GameState(self.handler)
         self.gameState.init()
         self.currentState = self.menuState
@@ -39,7 +40,10 @@ class Game:
         # self.map = TileMap('test_level.csv', self.ssTile)
         # self.bg = pygame.transform.rotate(self.bg, -90)
 
+    # def check_collision(self, sprite, group):
+    #     return pygame.sprite.spritecollide(sprite, group, False, pygame.sprite.collide_mask)
 
+        
         # draw everything here:
     def draw_window(self):
         self.WIN.fill(self.BLACK)

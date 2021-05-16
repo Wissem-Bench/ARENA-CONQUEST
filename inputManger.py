@@ -10,17 +10,9 @@ class InputManager():
         self.pos = (0, 0)
         self.count = 0
 
-    def tick(self):
-        if self.clicked == True:
-            self.clicked = False # :)
-        self.pos = pygame.mouse.get_pos()
-        self.check_events()
-
-
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                    running = False
                     pygame.quit()
                     print('game closed')
                     sys.exit()
@@ -31,3 +23,9 @@ class InputManager():
             elif event.type == pygame.MOUSEBUTTONUP:
                 # if self.clicked == False:
                 self.clicked = True
+
+    def tick(self):
+        if self.clicked == True:
+            self.clicked = False # :)
+        self.pos = pygame.mouse.get_pos()
+        self.check_events()

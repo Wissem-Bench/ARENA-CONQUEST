@@ -6,9 +6,8 @@ import spriteSheet
 class Animation:
 
     def __init__(self, frames, speed):
-        # fileName,columns,rows,flipped
+        
         self.frames = frames
-        # print("init animation class: " + str(len(self.frames[0])))
         self.speed = speed
         self.index , self.lastTime , self.currentTime , self.timer = 0,0,0,0
         self.animating = True

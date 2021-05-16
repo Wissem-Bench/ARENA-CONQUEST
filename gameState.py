@@ -5,6 +5,8 @@ from gameObject import GameObject
 from world import World
 import random
 from enemiesList import Skeleton
+from enemyController import EnemyController
+from heroesList import *
 
 class GameState():
 
@@ -13,13 +15,32 @@ class GameState():
         
     def init(self):
         self.handler.init()
-        self.world = World(self.handler, "battle_arena.png")
-        self.world.init()
-        # self.handler.game.assets.initGameAssets()
-        # self.camera = GameCamera(self.handler)
-        
+        # self.enemies_controller_list = []
+        self.world_1 = World(self.handler, "battle_arena.png") #, "battle_arena.png"
+        self.world_1.init()
+        self.current_world = self.world_1
         self.player = Player(self.handler)
-        # self.skeleton = Skeleton(self.handler)
+
+        self.skeleton = Skeleton(self.handler)
+        self.evil = EvilWizard(self.handler)
+        self.ronin = Ronin(self.handler)
+        self.skeleton.controller = EnemyController(self.handler, self.skeleton)
+        self.ronin.controller = EnemyController(self.handler, self.ronin)
+        self.evil.controller = EnemyController(self.handler, self.evil)
+        self.handler.characterManager.enemy_spawn(self.skeleton, 600, 250, self.world_1)
+        self.handler.characterManager.enemy_spawn(self.ronin, 2400, 250, self.world_1)
+        self.handler.characterManager.enemy_spawn(self.evil, 500, 150, self.world_1)
+        # self.ronin.moveLeft = True #in behave
+        # self.evil.moveLeft = True
+        
+        # self.ronin_controller = EnemyController(self.handler, self.ronin)
+        
+        # to be deleted
+        # self.enemies_controller_list.append(self.skeleton_controller)
+        # self.enemies_controller_list.append(self.ronin_controller)
+        # self.enemies_controller_list.append(self.evil_controller)
+        # self.handler.characterManager.enemies.extend(self.enemies_controller_list)
+
         # self.worldswitcher = {
         #     "world_1" : True ,
         #     "world_2" : False ,
@@ -28,15 +49,14 @@ class GameState():
 
 
     # def current_world(self): # both skeletons have SAME reference !??
-    #     self.world.world_creator([[self.skeleton, 200, 200], [self.skeleton, 300, 300]])
-    #     self.skeleton.moveRight = True
+
+        # self.world.world_creator([[self.skeleton, 200, 200], [self.skeleton, 300, 300]])
+        # self.skeleton.moveRight = True
 
     def tick(self):
-        self.world.tick()
+        self.current_world.tick() # include characterManager
         self.player.tick()
         # self.skeleton.tick()
-
-        
         # if self.worldswitcher["world_1"] == True:
         #     self.world.world_1()
         # elif self.worldswitcher["world_2"] == True:
@@ -46,18 +66,5 @@ class GameState():
         
     def draw(self):
         # self.current_world()
-        self.world.draw()
+        self.current_world.draw()
         self.player.draw()
-        # self.skeleton.draw()
-        # self.colors = ['yellow']
-        # self.sprites = pygame.sprite.Group()
-        # self.objects = pygame.sprite.Group()
-        
-        # for _ in range(4):
-        #     pos = random.randint(100, 400), random.randint(100, 400)
-        #     self.circle = GameObject(self.handler, pos, random.choice(self.colors), self.sprites, self.objects)
-
-    # def worlds(self):
-    #     self.world.enemiesAppear(character, x, y)
-    
-        

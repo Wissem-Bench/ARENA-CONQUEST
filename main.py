@@ -7,4 +7,8 @@ def main():
 if __name__ == "__main__":
     main()
 
-    # TO DO : choosen character from menu state to game to game state
+    # todo : sprint , heroknight animmation , start/finish animation
+    #        health-bar offset, health error , animations offset , heroes scaling
+    #        xy correction , change menu bg , other enemies 
+    #        bg collision , steps and transparency
+    #        score/Xp

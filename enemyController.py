@@ -7,8 +7,8 @@ class EnemyController():
     def __init__(self, handler, character):
         self.handler = handler
         self.character = character
-        # self.orders = {"moving" : True}
-        # self.character.moveRight = True
+        self.character.controller = self
+        # self.enemy_collision_side = self.handler.characterManager.check_rect_collision(self.character.rect, self.handler.characterManager.collided_entity(self.character))
         # moveZone = self.circle(moveZone)
         # followingZone = self.circle(followingZone)
         # attackingZone = self.circle(attackingZone)
@@ -18,6 +18,19 @@ class EnemyController():
         and not self.character.moveDown and not self.character.orderedToAttack):
             self.character.notOrdered = True
         else: self.character.notOrdered = False
+        if self.character.name == "ronin":
+            if not self.character.isAttacking and not self.character.dead and not self.character.getHurt:
+                    self.character.moveLeft = True
+            else: self.character.moveLeft = False
+        elif self.character.name == "skeleton":
+            if not self.character.isAttacking and not self.character.dead and not self.character.getHurt:
+                    self.character.moveRight = True
+            else: self.character.moveRight = False
+        elif self.character.name == "evil wizard":
+            if not self.character.isAttacking and not self.character.dead and not self.character.getHurt:
+                    self.character.moveLeft = True
+            else: self.character.moveLeft = False
+
 
     def isInside(circle_x, circle_y, rad, x, y):
         if ((x - circle_x) * (x - circle_x) + 
@@ -36,14 +49,29 @@ class EnemyController():
             return True
         return False
 
+    def enemy_move(self):
 
-    def enemyMoves(self, enemy, player_pos):
-        if player_pos not in enemy.moveZone:
-            if player in enemy.followingZone:
-                if player_pos in attackingZone:
-                    enemy.attack()
-                else : enemy.follow()
-            else : enemy.move
+        if self.character.collided:
+
+            if self.enemy_collision_side == 'right' :
+                self.character.moveRight = False
+
+            if self.enemy_collision_side == 'left' :
+                self.character.moveLeft = False
+
+            if self.enemy_collision_side == 'top' :
+                self.character.moveUp = False
+
+            if self.enemy_collision_side == 'bottom' :
+                self.character.moveDown = False
+
+    # def enemyMoveState(self, enemy, player_pos):
+    #     if player_pos not in enemy.moveZone:
+    #         if player in enemy.followingZone:
+    #             if player_pos in attackingZone:
+    #                 enemy.attack()
+    #             else : enemy.follow()
+    #         else : enemy.move
 
 
     # def inAttackRange():
@@ -57,7 +85,10 @@ class EnemyController():
 
     def tick(self):
         self.character.tick()
+        # self.handler.characterManager.check_rect_collision(self.character.rect, self.handler.characterManager.collided_entity(self.character))
+        # self.enemy_move()
         self.behave()
+        
 
     def draw(self):
         self.character.draw()

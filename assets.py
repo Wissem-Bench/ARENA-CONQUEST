@@ -1,4 +1,4 @@
-import pygame
+import pygame, pygame.image, pygame.transform
 import math
 from spriteSheet import SpriteSheet 
 
@@ -8,22 +8,28 @@ class Assets:
         self.handler = handler
         # pass
 
-    def initGameAssets(self):
-        self.heroknight = self.parceling(SpriteSheet([["HeroKnight", 10, 9]], (1,1)), [8, 18, 24])
+    def initAssets(self):
+        self.heroknight = self.parceling(SpriteSheet([["HeroKnight", 10, 9]], (1, 1)), [8, 18, 24, 25, 26]) #(46,48) for hurt animation
+                                                                                                        #(49,58) for death
 
         self.evilwizard = self.parceling(SpriteSheet([["Evil Wizard/Idle", 8, 1], 
                                                     ["Evil Wizard/Run", 8, 1],
-                                                    ["Evil Wizard/Attack2", 8, 1]], (1,1.25)), [8,16,24])
+                                                    ["Evil Wizard/Attack2", 8, 1],
+                                                    ["Evil Wizard/Take hit", 3, 1],
+                                                    ["Evil Wizard/Death", 7, 1]], (1, 1)), [8,16,24,27,34])
 
         self.ronin = self.parceling(SpriteSheet([["Ronin/spr_RoninIdle_strip", 8, 1], 
                                                 ["Ronin/spr_RoninRun_strip", 10, 1],
-                                                ["Ronin/spr_RoninAttack_strip", 25, 1]], (1,1)), [8,18,43])
+                                                ["Ronin/spr_RoninAttack_strip", 25, 1],
+                                                ["Ronin/spr_RoninGetHit_strip", 7, 1],
+                                                ["Ronin/spr_RoninDeath_strip", 16, 1]], (1,1)), [8,18,43,50,66])
 
-        self.skeleton = self.parceling(SpriteSheet([["Skeleton Idle", 11, 1], 
-                                                    ["Skeleton Walk", 13, 1],
-                                                    ["Skeleton Attack", 18, 1]], (1,1)), [11, 24, 42])
+        self.skeleton = self.parceling(SpriteSheet([["Skeleton/Skeleton Idle", 11, 1], 
+                                                    ["Skeleton/Skeleton Walk", 13, 1],
+                                                    ["Skeleton/Skeleton Attack", 18, 1], #offset to attacking animation
+                                                    ["Skeleton/Skeleton Hit", 8, 1],
+                                                    ["Skeleton/Skeleton Dead", 15, 1]], (1,1)), [11, 24, 42, 50,65])
 
-    def initMenuAssets(self):
         self.background = pygame.image.load("Assets/Menu/grey-cat-glacier.jpg").convert()
         self.background = pygame.transform.scale(self.background, (int(1920/2), int(1801/3)))
 
@@ -51,6 +57,9 @@ class Assets:
 
         self.left = self.buttons("Back Square Button.png", 100, 100)
         self.left_rect = self.rect_pos(self.left, 7, 5)
+
+        # self.heroStart = pygame.image.load("Assets/Menu/")
+        # self.heroFinishPoint = pygame.image.load("Assets/Menu/")
     
     def buttons(self, img, w, h):
         button = pygame.image.load(f"Assets/Menu/{img}")

@@ -1,17 +1,19 @@
-import pygame
+import pygame, pygame.transform, pygame.image
 
 class SpriteSheet:
     def __init__(self, files, scale):
         self.scale = scale
         self.files = files
         self.sheets = []
+        
         for i in range(len(files)):
             self.sheets.append(pygame.image.load(f'Assets/{self.files[i][0]}.png'))
             for j in range(len(self.sheets)):
-                pygame.transform.scale(self.sheets[j], (int(self.sheets[j].get_width()/scale[0]), int(self.sheets[j].get_height()/scale[1])))
+                x_scale = int(self.sheets[j].get_width()/scale[0])
+                y_scale = int(self.sheets[j].get_height()/scale[1])
+                self.sheets[j] = pygame.transform.scale(self.sheets[j], (x_scale, y_scale))
+                # self.background = pygame.transform.scale(self.background, (int(1920/2), int(1801/3)))
 
-    def scale(self):
-        pass
 
     def strip(self): # fill frames array with a group of sub images by striping the sheet
         right_frames = []
