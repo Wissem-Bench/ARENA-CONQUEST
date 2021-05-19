@@ -15,12 +15,12 @@ class MenuState():
         self.assets = self.handler.game.assets
         self.assets.initAssets()
         self.heroes = [Animation(self.handler.game.assets.heroknight[0], 0.07), 
-                        Animation(self.handler.game.assets.evilwizard[2], 0.07), 
+                        Animation(self.handler.game.assets.evilwizard[0], 0.07), 
                         Animation(self.handler.game.assets.ronin[0], 0.07)]
         self.currentAnimation = self.heroes[0]
         self.choosenHero = self.heroes.index(self.currentAnimation)
         self.rect = self.currentAnimation.frames[0].get_rect()
-        # self.rect.center = (450 , 0)
+        self.offset = (0,0)
         self.rect.x = 300 + self.assets.grid.get_rect().w / 2 - self.rect.w / 2
         self.rect.y = 0 + self.assets.grid.get_rect().h / 2 - self.rect.h / 2
         self.displayer = {
@@ -41,7 +41,7 @@ class MenuState():
                                 [self.assets.back, self.assets.back_rect],
                                 [self.assets.right, self.assets.right_rect],
                                 [self.assets.left, self.assets.left_rect],
-                                [self.currentAnimation.getCurrentFrame(), (self.rect.x, self.rect.y)]])
+                                [self.currentAnimation.getCurrentFrame(), (self.rect.x - self.offset[0], self.rect.y - self.offset[1])]])
         elif page_name == "options":
             self.elements_draw([[self.assets.background, (0, 0)], 
                                 [self.assets.back, self.assets.back_rect]])
@@ -118,6 +118,15 @@ class MenuState():
             # self.rect.x = 320
             # self.rect.y =50
 
+    def hero_offset(self):
+        if self.currentAnimation == self.heroes[0] :
+            self.offset = (0,0)
+        if self.currentAnimation == self.heroes[1] :
+            self.offset = (80,100)
+        if self.currentAnimation == self.heroes[2] :
+            self.offset = (-15,-10)
+        return self.offset
+
     def draw(self):
         currentdisplayer = ""
         for k, v in self.displayer.items():
@@ -127,4 +136,5 @@ class MenuState():
 
     def tick(self):
         self.current_tick()
+        self.hero_offset()
         self.currentAnimation.tick()

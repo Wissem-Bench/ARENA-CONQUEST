@@ -21,20 +21,22 @@ class Player:
     #         self.hero.damage(50)
 
     def keyManager(self):
+
         if self.handler.inputManager.pressed.get(pygame.K_d):
             self.hero.orderedToAttack = True
         else: self.hero.orderedToAttack = False
+        
         if not self.hero.isAttacking and not self.hero.dead: 
-            if self.handler.inputManager.pressed.get(pygame.K_RIGHT) and self.hero.rect.x + self.hero.rect.width < 3836: #bg width
+            if self.handler.inputManager.pressed.get(pygame.K_RIGHT):
                 self.hero.moveRight = True
             else: self.hero.moveRight = False
-            if self.handler.inputManager.pressed.get(pygame.K_LEFT) and self.hero.rect.x > 0:
+            if self.handler.inputManager.pressed.get(pygame.K_LEFT):
                 self.hero.moveLeft = True
             else: self.hero.moveLeft = False
-            if self.handler.inputManager.pressed.get(pygame.K_UP) and self.hero.rect.y > 0:
+            if self.handler.inputManager.pressed.get(pygame.K_UP):
                 self.hero.moveUp = True
             else: self.hero.moveUp = False
-            if self.handler.inputManager.pressed.get(pygame.K_DOWN) and self.hero.rect.y + self.hero.rect.height < 656: #bg height
+            if self.handler.inputManager.pressed.get(pygame.K_DOWN):
                 self.hero.moveDown = True
             else: self.hero.moveDown = False
         else: 
@@ -42,9 +44,11 @@ class Player:
             self.hero.moveLeft = False
             self.hero.moveUp = False
             self.hero.moveDown = False
+
         if self.handler.inputManager.pressed.get(pygame.K_s):
             self.hero.sprint = True
         else: self.hero.sprint = False
+
         if all(key == False for key in self.handler.inputManager.pressed.values()):
             self.hero.notOrdered = True
         else: self.hero.notOrdered = False

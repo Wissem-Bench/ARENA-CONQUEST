@@ -7,8 +7,8 @@ def main():
 if __name__ == "__main__":
     main()
 
-    # todo : sprint , heroknight animmation , start/finish animation
-    #        health-bar offset, health error , animations offset , heroes scaling
+    # todo : sprint [ok] , heroknight animmation [ok] , start/finish-point animation [ok]
+    #        health-bar offset [ok], health error [ok], animations offset , heroes scaling
     #        xy correction , change menu bg , other enemies 
     #        bg collision , steps and transparency
-    #        score/Xp
+    #        score/Xp , camera [ok]

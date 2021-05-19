@@ -9,16 +9,17 @@ class Assets:
         # pass
 
     def initAssets(self):
-        self.heroknight = self.parceling(SpriteSheet([["HeroKnight", 10, 9]], (1, 1)), [8, 18, 24, 25, 26]) #(46,48) for hurt animation
-                                                                                                        #(49,58) for death
+        self.heroknight = self.parceling(SpriteSheet([["Hero Knight/HeroKnight", 10, 9]], (1, 1)), [8, 18, 24, 0, 46, 48, 49]) 
+        #(46,48) for hurt animation
+        #(49,58) for death
 
-        self.evilwizard = self.parceling(SpriteSheet([["Evil Wizard/Idle", 8, 1], 
-                                                    ["Evil Wizard/Run", 8, 1],
+        self.evilwizard = self.parceling(SpriteSheet([["Evil Wizard/Idle2", 8, 1], 
+                                                    ["Evil Wizard/Run2", 8, 1],
                                                     ["Evil Wizard/Attack2", 8, 1],
                                                     ["Evil Wizard/Take hit", 3, 1],
                                                     ["Evil Wizard/Death", 7, 1]], (1, 1)), [8,16,24,27,34])
 
-        self.ronin = self.parceling(SpriteSheet([["Ronin/spr_RoninIdle_strip", 8, 1], 
+        self.ronin = self.parceling(SpriteSheet([["Ronin/spr_RoninIdle_strip", 8, 1],
                                                 ["Ronin/spr_RoninRun_strip", 10, 1],
                                                 ["Ronin/spr_RoninAttack_strip", 25, 1],
                                                 ["Ronin/spr_RoninGetHit_strip", 7, 1],
@@ -28,7 +29,13 @@ class Assets:
                                                     ["Skeleton/Skeleton Walk", 13, 1],
                                                     ["Skeleton/Skeleton Attack", 18, 1], #offset to attacking animation
                                                     ["Skeleton/Skeleton Hit", 8, 1],
-                                                    ["Skeleton/Skeleton Dead", 15, 1]], (1,1)), [11, 24, 42, 50,65])
+                                                    ["Skeleton/Skeleton Dead", 15, 1]], (1,1)), [11,24,42,50,65])
+
+        self.tower = self.parceling(SpriteSheet([["Tower/FlyingObelisk3", 13, 1], 
+                                                ["Tower/FlyingObelisk3", 13, 1],
+                                                ["Tower/lightning3", 13, 1],
+                                                ["Tower/FlyingObelisk3", 13, 1],
+                                                ["Tower/Destruction3", 17, 1]], (1,1)), [13,26,39,52,69])
 
         self.background = pygame.image.load("Assets/Menu/grey-cat-glacier.jpg").convert()
         self.background = pygame.transform.scale(self.background, (int(1920/2), int(1801/3)))
@@ -72,12 +79,32 @@ class Assets:
         button_rect.y = math.ceil(self.handler.game.WIN.get_height()/b)
         return button_rect
 
+    # def parceling(self, spritesheet, indexes):
+    #     result = []
+    #     lastIndex = 0
+    #     frames = spritesheet.strip()
+    #     for index in indexes:
+    #         result.append(frames[0][lastIndex: index])
+    #         result.append(frames[1][lastIndex: index])
+    #         lastIndex = index
+    #     return result # array of arrays (group of frames)
+
     def parceling(self, spritesheet, indexes):
         result = []
+        res = []
         lastIndex = 0
         frames = spritesheet.strip()
+        ignore = False
         for index in indexes:
-            result.append(frames[0][lastIndex: index])
-            result.append(frames[1][lastIndex: index])
-            lastIndex = index
+            if index != 0:
+                if not ignore:
+                    result.append(frames[0][lastIndex: index])
+                    result.append(frames[1][lastIndex: index])
+                    lastIndex = index
+                    res.append(lastIndex)
+                else:
+                    ignore = False
+                    lastIndex = index - 1
+            else:
+                ignore = True
         return result # array of arrays (group of frames)

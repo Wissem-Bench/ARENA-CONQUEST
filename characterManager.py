@@ -11,6 +11,7 @@ class CharacterManager():
     def init(self):
         self.characterGroup = pygame.sprite.Group()
         self.enemies = []
+        self.transparency = False
 
     def enemy_spawn(self, character, x, y, world):
         character.rect.x = x
@@ -18,6 +19,12 @@ class CharacterManager():
         # if self.handler.game.gameState.current_world == world :
         self.characterGroup.add(character)
         self.enemies.append(character.controller)
+        # if 0 <= character.rect.x <= 1000 :
+        #     self.transparency = True
+        #     print(str(self.transparency))
+        # else : 
+        #     self.transparency = False
+        #     print(str(self.transparency))
 
     def collided_entity(self, character):
         testing_group = pygame.sprite.Group()
@@ -60,41 +67,37 @@ class CharacterManager():
 
     def check_characters_rect_collision(self):
         for character_1 in self.characterGroup: #for all characters
-            for i in range(len(character_1.rect_collision_side)-2, 0, -2): #couples of (char, side)
-                print(f'for {character_1.name} length {len(character_1.rect_collision_side)} index {i}')
+            for i in range(len(character_1.rect_collision_side)-2, -1, -2): #couples of (char, side)
                 collidedChar = character_1.rect_collision_side[i] #for all its collided chars
                 if not collidedChar.rect.contains(character_1.rect) and not character_1.rect.colliderect(collidedChar.rect):
-                    # for removed in self.characterGroup:
-                    #     if removed in character_1.rect_collision_side:
-                    #         removedIndex = removed.rect_collision_side.index(character_1)
-                    #         removed.rect_collision_side.remove(character_1)
-                    #         removed.rect_collision_side.pop(removedIndex)
                     character_1.rect_collision_side.remove(collidedChar) #remove character that exit the rect
                     character_1.rect_collision_side.pop(i) #remove its appropriate side
             for character_2 in self.collided_entity(character_1):
                 index = character_1.rect_collision_side.index(character_2)
                 if character_1.rect_collision_side[index + 1] == '':
                     self.check_rect_collision(character_1, character_2)
-                    
-            
-    def damage(self, character1: Character, character2: Character):
 
-        if character1.isAttacking == True : 
-            if  character1.rightCollide or character1.leftCollide or character1.topCollide or character1.downCollide:
-                if character2 not in character1.hittingList:
-                    character1.hittingList.append(character2)
-                    if character2.health > 0:
-                        character2.health -= character1.damage
-                        character2.getHurt = True
-                    if character1.damage > character2.health:
-                        character2.health = 0
-                        character2.dead = True
-                        character2.getHurt = False
-                        # self.characterGroup.remove(character2)
-                        # self.enemies.remove(character2.controller)
+
+    def damage(self, character1: Character, character2: Character):
+        if character1.isAttacking == True and character1.collided == True: #and character2 in self.collided_entity(character1) : #collided(character1):
+            if character2 in self.collided_entity(character1) and character2 not in character1.hittingList:
+                character1.hittingList.append(character2)
+                if character2.health > 0:
+                    character2.health -= character1.damage
+                    character2.getHurt = True
+                if character1.damage > character2.health:
+                    character2.health = 0
+                    character2.dead = True
+                    character2.getHurt = False
         else: 
             del character1.hittingList[:]
 
+    def blocked(self, character):
+        if character.rect.x + character.rect.width + character.velocity + 1 >= self.handler.game.gameState.world_1.bg.get_rect().width or character.rect.x - character.velocity - 1 < 0 or character.rect.y - character.velocity - 1 < 0 or character.rect.y + character.rect.height + character.velocity + 1 > self.handler.game.gameState.world_1.bg.get_rect().height:
+            return True
+        if character.rightCollide or character.leftCollide or character.topCollide or character.downCollide:
+            return True
+        return False
 
     def tick(self):
         for enemy in self.enemies :

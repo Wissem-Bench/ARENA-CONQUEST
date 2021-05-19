@@ -3,7 +3,7 @@ from animation import Animation
 
 class Character(pygame.sprite.Sprite) :
     
-    def __init__(self, handler, assets, health, max_health, damage, velocity):
+    def __init__(self, handler, assets, health, max_health, damage, velocity, health_bar_offset):
         super().__init__()
         self.handler = handler
         self.health = health
@@ -32,25 +32,24 @@ class Character(pygame.sprite.Sprite) :
         self.leftDeathAnimation = Animation(assets[9], 0.07)
         self.currentAnimation = self.rightIdleAnimation
         self.rect = self.rightRunAnimation.frames[0].get_rect()
-        self.rect.x = 70 #player starting x (and y)
-        self.rect.y = 225 
+        self.rect.x = 400 #player starting x (and y)
+        self.rect.y = 250 
         self.side = 'right'
         self.isAttacking = False
         self.notOrdered = True
         self.WIN = self.handler.game.WIN
-        # self.sword_rect = 
-        # self.x_camera_offset = self.handler.game.gameState.world.camera.xOffset
-        # self.y_camera_offset = self.handler.game.gameState.world.camera.xOffset
         self.image = self.currentAnimation.frames[0]
         self.collided = False
         self.rect_collision_side = []
-        # self.mask = pygame.mask.from_surface(self.image)
         self.name = ''
         self.hittingList = []
         self.getHurt = False
         self.dead = False
         self.controller = None
         self.sprint = False
+        self.visual_rad = 200
+        self.attack_rad = 50
+        self.health_bar_offset = health_bar_offset
         # self.positon = [self.rect.x, self.rect.y]
         # self.feet = pygame.Rect(0, 0, self.rect.width * 0.5, 12)
         # self.old_position = self.positon.copy()
@@ -69,11 +68,13 @@ class Character(pygame.sprite.Sprite) :
 
 
     def health_bar(self, surface):
+        x_camera_offset = self.handler.game.gameState.current_world.camera.xOffset
+        y_camera_offset = self.handler.game.gameState.current_world.camera.yOffset
         # def health_bar(self, surface, xRectOffset, yRectOffset):
         Green = (111, 210, 46)
         Gray = (60, 60, 60)
-        bar_position = [self.rect.x - self.handler.game.gameState.current_world.camera.xOffset -5, self.rect.y - self.handler.game.gameState.current_world.camera.yOffset -5, self.health, 5]
-        back_bar_position = [self.rect.x -self.handler.game.gameState.current_world.camera.xOffset -5, self.rect.y - self.handler.game.gameState.current_world.camera.yOffset -5, self.max_health, 5]
+        bar_position = [self.rect.x - x_camera_offset - self.health_bar_offset[0], self.rect.y - y_camera_offset - self.health_bar_offset[1], self.health, 2]
+        back_bar_position = [self.rect.x - x_camera_offset - self.health_bar_offset[0], self.rect.y - y_camera_offset - self.health_bar_offset[1], self.max_health, 2]
         pygame.draw.rect(surface, Gray, back_bar_position)
         pygame.draw.rect(surface, Green, bar_position)
 
@@ -93,25 +94,30 @@ class Character(pygame.sprite.Sprite) :
             self.downCollide = True
         else: self.downCollide = False
 
-        if self.moveRight and not self.rightCollide:
-            self.rect.x += self.velocity
+        if self.moveRight and not self.rightCollide and self.rect.x + self.rect.width + self.velocity < self.handler.game.gameState.world_1.bg.get_rect().width:
+            if self.sprint == True :
+                self.rect.x += self.maxVelocity
+            else : self.rect.x += self.velocity
 
-        if self.moveLeft and not self.leftCollide:
-            self.rect.x -= self.velocity
+        if self.moveLeft and not self.leftCollide and self.rect.x - self.velocity > 0:
+            if self.sprint == True :
+                self.rect.x -= self.maxVelocity
+            else : self.rect.x -= self.velocity
 
-        if self.moveUp and not self.topCollide:
-            self.rect.y -= self.velocity
+        if self.moveUp and not self.topCollide and self.rect.y - self.velocity > 0:
+            if self.sprint == True :
+                self.rect.y -= self.maxVelocity
+            else : self.rect.y -= self.velocity
 
-        if self.moveDown and not self.downCollide:
-            self.rect.y += self.velocity
-
+        if self.moveDown and not self.downCollide and self.rect.y + self.rect.height + self.velocity < self.handler.game.gameState.world_1.bg.get_rect().height:
+            if self.sprint == True :
+                self.rect.y += self.maxVelocity
+            else : self.rect.y += self.velocity
         
-        if (self.moveRight or self.moveLeft or self.moveUp or self.moveDown) and not self.rightCollide and self.sprint:
-            self.velocity = self.maxVelocity
-            print(str(self.velocity))
-
-
-
+        # if ((self.moveRight and not self.rightCollide) or (self.moveLeft and not self.leftCollide) or (self.moveUp and  not self.topCollide) or (self.moveDown and not self.downCollide)) and self.sprint:
+        #     self.velocity = self.maxVelocity
+        #     print(str(self.velocity))
+        
     def death(self):
         if self.dead:
             if self.currentAnimation == self.rightDeathAnimation or self.currentAnimation == self.leftDeathAnimation :
@@ -195,12 +201,15 @@ class Character(pygame.sprite.Sprite) :
         self.currentAnimation.tick()
         self.image = self.currentAnimation.getCurrentFrame()
         self.health_bar(self.WIN)
+        # self.sprint()
         # self.moving_range()
 
 
     def draw(self):
         # pygame.draw.rect(self.WIN, (60, 60, 60), (self.rect.x - self.handler.game.gameState.current_world.camera.xOffset, self.rect.y - self.handler.game.gameState.current_world.camera.yOffset, self.rect.w, self.rect.h))
+        pygame.draw.circle(self.WIN, (255, 0, 0), (self.rect.center[0] - self.handler.game.gameState.current_world.camera.xOffset, self.rect.center[1] - self.handler.game.gameState.current_world.camera.yOffset), self.visual_rad, 1)
         self.handler.game.WIN.blit(self.currentAnimation.getCurrentFrame(),
         (self.rect.x - self.handler.game.gameState.current_world.camera.xOffset,
         self.rect.y - self.handler.game.gameState.current_world.camera.yOffset))
         self.health_bar(self.WIN)
+        pygame.draw.circle(self.WIN, (255, 0, 0), (self.rect.center[0] - self.handler.game.gameState.current_world.camera.xOffset, self.rect.center[1] - self.handler.game.gameState.current_world.camera.yOffset), 50, 1)

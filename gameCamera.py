@@ -14,13 +14,13 @@ class GameCamera:
     def checkBlankSpace(self):
         if self.xOffset < 0:
             self.xOffset = 0
-        elif self.xOffset > 4000 - self.handler.game.WIDTH: #1920 = background width
-            self.xOffset = 4000 - self.handler.game.WIDTH
+        elif self.xOffset > 3836 - self.handler.game.WIDTH: #1920 = background width
+            self.xOffset = 3836 - self.handler.game.WIDTH
 
         if self.yOffset < 0:
             self.yOffset = 0
-        elif self.yOffset > 1289 - self.handler.game.HEIGHT: #1289 = background height
-            self.yOffset = 1289 - self.handler.game.HEIGHT
+        elif self.yOffset > 656 - self.handler.game.HEIGHT: #1289 = background height
+            self.yOffset = 656 - self.handler.game.HEIGHT
         
         
     def centerOnEntity(self, character):

@@ -12,7 +12,9 @@ class SpriteSheet:
                 x_scale = int(self.sheets[j].get_width()/scale[0])
                 y_scale = int(self.sheets[j].get_height()/scale[1])
                 self.sheets[j] = pygame.transform.scale(self.sheets[j], (x_scale, y_scale))
-                # self.background = pygame.transform.scale(self.background, (int(1920/2), int(1801/3)))
+            
+            # for k in range(len(self.sheets)) :
+            #     self.sheets[k].fill((255, 255, 255, 128), None, pygame.BLEND_RGBA_MULT)
 
 
     def strip(self): # fill frames array with a group of sub images by striping the sheet

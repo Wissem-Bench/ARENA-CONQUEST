@@ -1,6 +1,8 @@
 import pygame
 import math
 import utils
+import random
+import time
 
 class EnemyController():
     
@@ -8,85 +10,140 @@ class EnemyController():
         self.handler = handler
         self.character = character
         self.character.controller = self
-        # self.enemy_collision_side = self.handler.characterManager.check_rect_collision(self.character.rect, self.handler.characterManager.collided_entity(self.character))
-        # moveZone = self.circle(moveZone)
-        # followingZone = self.circle(followingZone)
-        # attackingZone = self.circle(attackingZone)
+        self.lastRandomMoveTime, self.currentRandomMoveTime, self.randomMoveTimer = 0,0,0
+        self.randomMoveLimitTime = 0
+        self.lastCooldownTime, self.currentCooldownTime, self.cooldownTimer = 0,0,0
+        self.randomMovingState = True
+        self.coolingDownState = False
+        self.chasingState = False
+        self.attackingState = False
 
     def behave(self):
         if (not self.character.moveRight and not self.character.moveLeft and not self.character.moveUp 
         and not self.character.moveDown and not self.character.orderedToAttack):
             self.character.notOrdered = True
         else: self.character.notOrdered = False
-        if self.character.name == "ronin":
-            if not self.character.isAttacking and not self.character.dead and not self.character.getHurt:
-                    self.character.moveLeft = True
-            else: self.character.moveLeft = False
-        elif self.character.name == "skeleton":
-            if not self.character.isAttacking and not self.character.dead and not self.character.getHurt:
-                    self.character.moveRight = True
-            else: self.character.moveRight = False
-        elif self.character.name == "evil wizard":
-            if not self.character.isAttacking and not self.character.dead and not self.character.getHurt:
-                    self.character.moveLeft = True
-            else: self.character.moveLeft = False
+        if not self.character.isAttacking and not self.character.dead and not self.character.getHurt:
+            if not self.inVisualange(self.handler.game.gameState.player.hero):
+                if self.chasingState:
+                    self.coolingDownState = True
+                    self.randomMovingState = False
+                    self.lastCooldownTime = time.time()
+                    self.chasingState = False
+                    print('start cooldown')
+                else:
+                    self.randomMove()
+                    print('random')
+                self.attackingState = False # for long attack animation (outside circle but still attacking)
+            else:
+                self.chasing(self.handler.game.gameState.player.hero)
+        if self.attackingState:
+            self.stopMoving()
+            self.character.orderedToAttack = True
+            print('attacking')
+        else: self.character.orderedToAttack = False
 
-
-    def isInside(circle_x, circle_y, rad, x, y):
-        if ((x - circle_x) * (x - circle_x) + 
-            (y - circle_y) * (y - circle_y) <= rad * rad):
-            return True
-        else:
-            return False
-
-    # moveZone fixed x and y
-    # attackingzone and followingzone x = enemy.rect.x , same for y
-
-    def inAttack_Range(self):
-        player = self.handler.game.gameState.player
-        enemy = self.handler.game.gameState.enemy
-        if utils.isInside(enemy.x , enemy.y, enemy.attack_rad, player.character.rect.x, player.character.rect.y):
+    def inVisualange(self, enemy):
+        if utils.isInside(self.character.rect.center[0] , self.character.rect.center[1], self.character.visual_rad, enemy.rect.center[0], enemy.rect.center[1]):
             return True
         return False
 
-    def enemy_move(self):
+    def stopMoving(self):
+        self.character.moveRight = False
+        self.character.moveLeft = False
+        self.character.moveUp = False
+        self.character.moveDown = False
+        
+    def cooldownAfterChasing(self):
+        print('cooldown')
+        self.currentCooldownTime = time.time()
+        self.cooldownTimer = self.currentCooldownTime - self.lastCooldownTime
+        print(f'cooldown: {self.cooldownTimer}')
+        if self.cooldownTimer < 0.2:
+            self.stopMoving()
+        else:
+            self.coolingDownState = False
+            self.randomMovingState = True
 
-        if self.character.collided:
+    def randomMove(self):
+        
+        if not self.randomMovingState:
+            self.cooldownAfterChasing()
+        else:
+        
+            if self.handler.characterManager.blocked(self.character):
+                self.stopMoving()
+                self.randomMoveTimer = 0
+                self.randomMoveLimitTime = 0
+            if self.randomMoveLimitTime > 0:
+                self.currentRandomMoveTime = time.time()
+                self.randomMoveTimer = self.currentRandomMoveTime - self.lastRandomMoveTime
+                if self.randomMoveTimer > self.randomMoveLimitTime:
+                    self.lastRandomMoveTime = self.currentRandomMoveTime
+                    self.randomMoveTimer = 0
+                    self.randomMoveLimitTime = 0
+            else:
+                self.stopMoving()
+                direction = random.randint(1, 8)
+                self.randomMoveLimitTime = random.uniform(1.5, 4)
+                if direction == 1:
+                    self.character.moveRight = True
+                elif direction == 2:
+                    self.character.moveLeft = True
+                elif direction == 3:
+                    self.character.moveUp = True
+                elif direction == 4:
+                    self.character.moveDown = True
+                elif direction == 5:
+                    self.character.moveRight = True
+                    self.character.moveUp = True
+                elif direction == 6:
+                    self.character.moveLeft = True
+                    self.character.moveUp = True
+                elif direction == 7:
+                    self.character.moveRight = True
+                    self.character.moveDown = True
+                elif direction == 8:
+                    self.character.moveLeft = True
+                    self.character.moveDown = True
+                self.currentRandomMoveTime = time.time()
+                self.lastRandomMoveTime = time.time()
 
-            if self.enemy_collision_side == 'right' :
-                self.character.moveRight = False
 
-            if self.enemy_collision_side == 'left' :
-                self.character.moveLeft = False
-
-            if self.enemy_collision_side == 'top' :
-                self.character.moveUp = False
-
-            if self.enemy_collision_side == 'bottom' :
-                self.character.moveDown = False
-
-    # def enemyMoveState(self, enemy, player_pos):
-    #     if player_pos not in enemy.moveZone:
-    #         if player in enemy.followingZone:
-    #             if player_pos in attackingZone:
-    #                 enemy.attack()
-    #             else : enemy.follow()
-    #         else : enemy.move
-
-
-    # def inAttackRange():
-	# 	if utils.isInside(eAttackRange.getCenterX(), eAttackRange.getCenterY(),eAttackRange.getWidth()/2, 
-	# 			handler.getGame().gameState.getPlayer().getActualX(), handler.getGame().gameState.getPlayer().getActualY()))
-	# 		return true;
-	# 	return false;
-
-    # def check_collision(self, sprite, group):
-    #     return pygame.sprite.spritecollide(sprite, group, False, pygame.sprite.collide_mask)
-
+    def chasing(self, enemy):
+        enemyX = enemy.rect.center[0]
+        enemyY = enemy.rect.center[1]
+        actualX = self.character.rect.center[0]
+        actualY = self.character.rect.center[1]
+        
+        if utils.isInside(actualX, actualY, self.character.attack_rad, enemyX, enemyY):
+            self.stopMoving()
+            self.chasingState = False
+            self.attackingState = True
+            return
+        else: 
+            self.chasingState = True
+            self.attackingState = False
+            print('chasing')
+        
+        if actualX < enemyX - enemy.velocity:
+            self.character.moveRight = True
+        else: self.character.moveRight = False
+        
+        if actualX > enemyX + enemy.velocity:
+            self.character.moveLeft = True
+        else: self.character.moveLeft = False
+        
+        if actualY < enemyY - enemy.velocity:
+            self.character.moveDown = True
+        else: self.character.moveDown = False
+        
+        if actualY > enemyY + enemy.velocity:
+            self.character.moveUp = True
+        else: self.character.moveUp = False
+    
     def tick(self):
         self.character.tick()
-        # self.handler.characterManager.check_rect_collision(self.character.rect, self.handler.characterManager.collided_entity(self.character))
-        # self.enemy_move()
         self.behave()
         
 

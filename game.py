@@ -16,7 +16,7 @@ pygame.init()
 class Game:
 
     def __init__(self):
-        pygame.display.set_caption("My Game")
+        pygame.display.set_caption("AREA CONQUEST")
         self.FPS = 60
         self.WIDTH = 900
         self.HEIGHT = 500
@@ -35,13 +35,9 @@ class Game:
         self.gameState = GameState(self.handler)
         self.gameState.init()
         self.currentState = self.menuState
-
         # self.ssTile = SsTiles('spritesheet.png')
         # self.map = TileMap('test_level.csv', self.ssTile)
         # self.bg = pygame.transform.rotate(self.bg, -90)
-
-    # def check_collision(self, sprite, group):
-    #     return pygame.sprite.spritecollide(sprite, group, False, pygame.sprite.collide_mask)
 
         
         # draw everything here:
