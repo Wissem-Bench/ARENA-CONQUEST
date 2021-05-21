@@ -36,7 +36,8 @@ class MenuState():
                                 [self.assets.quit, self.assets.quit_rect],
                                 [self.assets.options, self.assets.options_rect]])
         elif page_name == "newgame":
-            self.elements_draw([[self.assets.grid, (300, 0)], 
+            self.elements_draw([[self.assets.background, (0, 0)],
+                                [self.assets.grid, (300, 0)], 
                                 [self.assets.start, self.assets.start_rect],
                                 [self.assets.back, self.assets.back_rect],
                                 [self.assets.right, self.assets.right_rect],

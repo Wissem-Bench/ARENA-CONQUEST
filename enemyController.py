@@ -24,7 +24,8 @@ class EnemyController():
             self.character.notOrdered = True
         else: self.character.notOrdered = False
         if not self.character.isAttacking and not self.character.dead and not self.character.getHurt:
-            if not self.inVisualange(self.handler.game.gameState.player.hero):
+            if not self.inVisualRange(self.handler.game.gameState.player.hero):
+                self.character.sprint = False
                 if self.chasingState:
                     self.coolingDownState = True
                     self.randomMovingState = False
@@ -36,6 +37,7 @@ class EnemyController():
                     print('random')
                 self.attackingState = False # for long attack animation (outside circle but still attacking)
             else:
+                self.character.sprint = True
                 self.chasing(self.handler.game.gameState.player.hero)
         if self.attackingState:
             self.stopMoving()
@@ -43,7 +45,7 @@ class EnemyController():
             print('attacking')
         else: self.character.orderedToAttack = False
 
-    def inVisualange(self, enemy):
+    def inVisualRange(self, enemy):
         if utils.isInside(self.character.rect.center[0] , self.character.rect.center[1], self.character.visual_rad, enemy.rect.center[0], enemy.rect.center[1]):
             return True
         return False

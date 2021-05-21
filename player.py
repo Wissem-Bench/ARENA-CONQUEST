@@ -8,17 +8,8 @@ class Player:
     def __init__(self,handler):
         self.handler = handler
         self.hero = None
-        # self.handler.characterManager.characterGroup.add(self.hero)
-        # self.handler.characterManager.enemies.append(self.hero)
         self.handler.game.gameState.current_world.camera.centerOnEntity(self.hero)
-        # self.hero.controller = self
-        # self.handler.characterManager.
-        
 
-
-    # def player_health(self):
-    #     if self.hero.collided :
-    #         self.hero.damage(50)
 
     def keyManager(self):
 
@@ -53,13 +44,14 @@ class Player:
             self.hero.notOrdered = True
         else: self.hero.notOrdered = False
 
+
     def tick(self):
         self.keyManager()
         self.handler.game.gameState.current_world.camera.centerOnEntity(self.hero)
         self.hero.tick()
-        # self.player_move()
-        # self.handler.characterManager.check_rect_collision(self.hero, self.handler.characterManager.collided_entity(self.hero))
-        # self.handler.game.gameState.circle.check_color_collision(self.hero, self.handler.game.gameState.objects)
+        print("player x = " +  str(self.hero.rect.center[0]))
+        print("player y = " +  str(self.hero.rect.center[1]))
+        
 
     def draw(self):
         self.hero.draw()

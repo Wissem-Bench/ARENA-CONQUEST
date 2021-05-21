@@ -13,7 +13,7 @@ class CharacterManager():
         self.enemies = []
         self.transparency = False
 
-    def enemy_spawn(self, character, x, y, world):
+    def enemy_spawn(self, character, x, y):
         character.rect.x = x
         character.rect.y = y
         # if self.handler.game.gameState.current_world == world :

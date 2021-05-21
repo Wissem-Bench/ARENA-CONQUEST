@@ -9,27 +9,35 @@ class Assets:
         # pass
 
     def initAssets(self):
+        # self.minotaur = pygame.image.load("Assets/Minotaur.png") #.convert()
+        
         self.heroknight = self.parceling(SpriteSheet([["Hero Knight/HeroKnight", 10, 9]], (1, 1)), [8, 18, 24, 0, 46, 48, 49]) 
         #(46,48) for hurt animation
         #(49,58) for death
 
-        self.evilwizard = self.parceling(SpriteSheet([["Evil Wizard/Idle2", 8, 1], 
-                                                    ["Evil Wizard/Run2", 8, 1],
-                                                    ["Evil Wizard/Attack2", 8, 1],
-                                                    ["Evil Wizard/Take hit", 3, 1],
-                                                    ["Evil Wizard/Death", 7, 1]], (1, 1)), [8,16,24,27,34])
+        self.evilwizard = self.parceling(SpriteSheet([["Evil Wizard/Sprites/Idle", 8, 1], 
+                                                    ["Evil Wizard/Sprites/Run", 8, 1],
+                                                    ["Evil Wizard/Sprites/Attack2", 8, 1],
+                                                    ["Evil Wizard/Sprites/Take hit", 3, 1],
+                                                    ["Evil Wizard/Sprites/Death", 7, 1]], (1, 1)), [8,16,24,27,34])
 
         self.ronin = self.parceling(SpriteSheet([["Ronin/spr_RoninIdle_strip", 8, 1],
                                                 ["Ronin/spr_RoninRun_strip", 10, 1],
-                                                ["Ronin/spr_RoninAttack_strip", 25, 1],
+                                                ["Ronin/spr_RoninAttack_strip", 25, 1, (21, 0)],
                                                 ["Ronin/spr_RoninGetHit_strip", 7, 1],
                                                 ["Ronin/spr_RoninDeath_strip", 16, 1]], (1,1)), [8,18,43,50,66])
 
-        self.skeleton = self.parceling(SpriteSheet([["Skeleton/Skeleton Idle", 11, 1], 
-                                                    ["Skeleton/Skeleton Walk", 13, 1],
+        # self.ronin = self.parceling(SpriteSheet([["Ronin/spr_RoninIdle_strip", 8, 1],
+        #                                         ["Ronin/spr_RoninRun_strip", 10, 1],
+        #                                         ["Ronin/spr_RoninAttack_strip", 25, 1],
+        #                                         ["Ronin/spr_RoninGetHit_strip", 7, 1],
+        #                                         ["Ronin/spr_RoninDeath_strip", 16, 1]], (1,1)), [8,18,43,50,66])
+
+        self.skeleton = self.parceling(SpriteSheet([["Skeleton/Skeleton Idle2", 11, 1], 
+                                                    ["Skeleton/Skeleton Walk2", 26, 1],
                                                     ["Skeleton/Skeleton Attack", 18, 1], #offset to attacking animation
-                                                    ["Skeleton/Skeleton Hit", 8, 1],
-                                                    ["Skeleton/Skeleton Dead", 15, 1]], (1,1)), [11,24,42,50,65])
+                                                    ["Skeleton/Skeleton Hit2", 8, 1],
+                                                    ["Skeleton/Skeleton Dead2", 15, 1]], (1,1)), [11,37,55,63,78])
 
         self.tower = self.parceling(SpriteSheet([["Tower/FlyingObelisk3", 13, 1], 
                                                 ["Tower/FlyingObelisk3", 13, 1],
@@ -37,21 +45,21 @@ class Assets:
                                                 ["Tower/FlyingObelisk3", 13, 1],
                                                 ["Tower/Destruction3", 17, 1]], (1,1)), [13,26,39,52,69])
 
-        self.background = pygame.image.load("Assets/Menu/grey-cat-glacier.jpg").convert()
-        self.background = pygame.transform.scale(self.background, (int(1920/2), int(1801/3)))
+        self.background = pygame.image.load("Assets/Menu/menu background.jpg")
+        self.background = pygame.transform.scale(self.background, (int(1920/2.05), int(1080/2.05)))
 
         self.grid = pygame.image.load("Assets/Menu/Grid.png")
         self.grid = pygame.transform.scale(self.grid, (300, 246))
         # self.grid.set_alpha(100)
 
         self.newGame = self.buttons("New game Button.png", 200, 60)
-        self.newGame_rect = self.rect_pos(self.newGame, 18, 10)
+        self.newGame_rect = self.rect_pos(self.newGame, 2.5, 10)
 
         self.quit = self.buttons("Quit Button.png", 200, 60)
-        self.quit_rect = self.rect_pos(self.quit, 18, 4)
+        self.quit_rect = self.rect_pos(self.quit, 2.5, 4)
 
         self.options = self.buttons("options Button.png", 200, 60)
-        self.options_rect = self.rect_pos(self.options, 18, 2.5)
+        self.options_rect = self.rect_pos(self.options, 2.5, 2.5)
 
         self.start = self.buttons("Start Button.png", 200, 60)
         self.start_rect = self.rect_pos(self.start, 2.6, 1.8)
@@ -59,10 +67,10 @@ class Assets:
         self.back = self.buttons("Back Button.png", 200, 60)
         self.back_rect = self.rect_pos(self.back, 2.6, 1.4)
 
-        self.right = self.buttons("Next Square Button.png", 100, 100)
+        self.right = self.buttons("Next Square Button.png", 50, 50)
         self.right_rect = self.rect_pos(self.right, 1.3, 5)
 
-        self.left = self.buttons("Back Square Button.png", 100, 100)
+        self.left = self.buttons("Back Square Button.png", 50, 50)
         self.left_rect = self.rect_pos(self.left, 7, 5)
 
         # self.heroStart = pygame.image.load("Assets/Menu/")

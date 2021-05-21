@@ -23,7 +23,17 @@ class World():
         self.bg = pygame.transform.scale(self.bg, (int(3836/1), int(656/1)))
         self.camera = GameCamera(self.handler)
         self.handler.characterManager.init()
-        self.walls = []
+
+        rect_1 = pygame.Rect(0,198,180,314) #start
+        rect_2 = pygame.Rect(267,248,47,122) #little(between 2 stairs)
+        rect_3 = pygame.Rect(374,246,2000,200) #the biggest
+        rect_4 = pygame.Rect(0,198,180,314) #finish
+        rect_5 = pygame.Rect(267,248,47,122) #little 2
+
+        # self.points = [(200, 200), (250, 250), (200, 300), (150, 250)]
+        # self.stair_1 = 
+        self.movingZone = [rect_1,rect_2,rect_3,rect_4,rect_5]
+
         # self.playersGroup.add(self.handler.game.choosencharacter)
         # self.enemyGroup = pygame.sprite.Group()
 
@@ -41,18 +51,4 @@ class World():
         # self.group.draw(self.handler.game.WIN)
         self.handler.game.WIN.blit(self.bg, (0 - self.camera.xOffset, 0 - self.camera.yOffset))
         self.handler.characterManager.draw()
-
-    # def world_1(self):
-    #     self.backgroun44d = pygame.image.load("Assets/world_1.png").convert()
-    #     self.handler.game.WIN.blit(self.background, (0 - self.camera.xOffset, 0 - self.camera.yOffset))
-    #     self.enemiesAppear(self.skeleton, 200, 200)
-
-    # def world_2(self):
-    #     self.background = pygame.image.load("Assets/world_1.png").convert()
-    #     self.handler.game.WIN.blit(self.background, (0 - self.camera.xOffset, 0 - self.camera.yOffset))
-    #     self.enemiesAppear(skeleton, 200, 200)
-
-    # def world_3(self):
-    #     self.background = pygame.image.load("Assets/world_1.png").convert()
-    #     self.handler.game.WIN.blit(self.background, (0 - self.camera.xOffset, 0 - self.camera.yOffset))
-    #     self.enemiesAppear(skeleton, 200, 200)
+        # pygame.draw.polygon(self.handler.game.WIN, (255,255,255), self.points)

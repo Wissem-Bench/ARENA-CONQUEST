@@ -31,13 +31,9 @@ class Game:
         self.assets = Assets(self.handler)
         self.menuState = MenuState(self.handler)
         self.menuState.init()
-        # self.choosenHero = HeroKnight(self.handler) # TO BE NUKED !!!!!!!!!!!!!!!!???????????????????????
         self.gameState = GameState(self.handler)
         self.gameState.init()
         self.currentState = self.menuState
-        # self.ssTile = SsTiles('spritesheet.png')
-        # self.map = TileMap('test_level.csv', self.ssTile)
-        # self.bg = pygame.transform.rotate(self.bg, -90)
 
         
         # draw everything here:
